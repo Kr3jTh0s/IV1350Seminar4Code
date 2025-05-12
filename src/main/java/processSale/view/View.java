@@ -3,7 +3,7 @@ package src.main.java.processSale.view;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
-import src.main.java.processSale.controller.*;
+import src.main.java.processSale.controller.Controller;
 
 /**
  * The View class represents the user interface layer of the application.
@@ -45,6 +45,10 @@ public class View {
 
     public void displayAddedItem(String addedItem) {
         System.out.println(addedItem);
+    }
+
+    public void displayInsufficientPayment(BigDecimal insufficientPayment) {
+        System.out.println(insufficientPayment);
     }
 }
 

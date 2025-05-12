@@ -15,9 +15,9 @@ import src.main.java.processSale.view.*;
 public class Controller {
     private View view;        // The view layer for user interaction
     private Printer printer;  // Handles receipt printing
-    private Inventory inv;    // Manages inventory operations
-    private Discount disc;    // Handles discount operations
-    private Account acc;      // Handles accounting operations
+    private Inventory externalInventory;    // Manages inventory operations
+    private Discount discountDatabase;    // Handles discount operations
+    private Account externalAccounting;      // Handles accounting operations
     private Sale currentSale; // Represents the ongoing sale
 
     /**
@@ -28,11 +28,11 @@ public class Controller {
      * @param disc    The discount system for applying discounts.
      * @param acc     The accounting system for recording transactions.
      */
-    public Controller(Printer printer, Inventory inv, Discount disc, Account acc) {
+    public Controller(Printer printer, Inventory externalInventory, Discount discountDatabase, Account externalAccounting) {
         this.printer = printer;
-        this.inv = inv;
-        this.disc = disc;
-        this.acc = acc;
+        this.externalInventory = externalInventory;
+        this.discountDatabase = discountDatabase;
+        this.externalAccounting = externalAccounting;
     }
 
     /**
@@ -63,12 +63,12 @@ public class Controller {
      */
     public void registerItem(String itemID) {
         if (currentSale.itemExists(itemID)) {
-            currentSale.increaseItemQuantity(itemID);
+            view.displayAddedItem(currentSale.increaseItemQuantity(itemID));
         } else {
-            ItemDTO item = inv.getItem(itemID);
-            if (item != null) {
-                view.displayAddedItem(currentSale.addItem(item));
-            } else {
+            try {
+                ItemDTO searchedItem = externalInventory.getItem(itemID);
+                view.displayAddedItem(currentSale.addItem(searchedItem));
+            } catch (ItemNotFoundException e) {
                 view.itemNotFound(itemID);
             }
         }
@@ -94,9 +94,14 @@ public class Controller {
      * @param amountPaid The amount paid by the customer.
      */
     public void processSale(BigDecimal amountPaid) {
-        SaleSummaryDTO saleSummary = currentSale.processSale(amountPaid);
-        printer.printReceipt(saleSummary);
-        inv.updateInventory(saleSummary);
-        acc.accountSale(saleSummary);
+        try {
+            SaleSummaryDTO saleSummary = currentSale.processSale(amountPaid);
+            printer.printReceipt(saleSummary);
+            externalInventory.updateInventory(saleSummary);
+            externalAccounting.accountSale(saleSummary);
+        } catch (InsufficientPaymentException e) {
+            view.displayInsufficientPayment(e.getAmountBelowTotalPrice());
+        }
+        
     }
 }

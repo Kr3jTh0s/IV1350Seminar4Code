@@ -37,12 +37,13 @@ public class ItemList {
      * 
      * @param itemID The unique identifier of the item.
      */
-    public void increaseQuantity(String itemID) {
+    public String increaseQuantity(String itemID) {
         int quantity = getItemQuantity(itemID);
         if (quantity != 0) {
             itemsQuantity.put(itemID, ++quantity);
-            printAddedItem(getItem(itemID));
+            return GetAddedItemPrintOut(getItem(itemID));
         }
+        return "An error ocurred. Could not add item.";
     }
 
     /**
@@ -66,7 +67,7 @@ public class ItemList {
     public String addNewItem(ItemDTO item) {
         itemsMeta.put(item.getID(), item);
         itemsQuantity.put(item.getID(), 1);
-        return printAddedItem(item);
+        return GetAddedItemPrintOut(item);
     }
 
     /**
@@ -76,13 +77,17 @@ public class ItemList {
      * @return The id, name, price, VAT and description of the added item
      *         as a string.
      */
-    private String printAddedItem(ItemDTO item) {
-        String addedItem = "Added 1 item with ID " + item.getID() + ":%n" +
-                           "Item Name: " + item.getName() + "%n" +
-                           "Price:" + item.getPrice().toString() + " SEK%n" +
-                           "VAT: " + item.getVATRate().multiply(BigDecimal.valueOf(100)).toString() + "%n" +
-                           "Description: " + item.getDescription() + "%n%n";
-        return addedItem;
+    private String GetAddedItemPrintOut(ItemDTO item) {
+        return String.format("Added 1 item with ID %s:%n" +
+                             "Item Name: %s%n" +
+                             "Price: %.2f SEK%n" +
+                             "VAT: %.0f%%%n" +
+                             "Description: %s%n%n",
+                             item.getID(), 
+                             item.getName(), 
+                             item.getPrice(), 
+                             item.getVATRate().multiply(BigDecimal.valueOf(100)), 
+                             item.getDescription());
     }
 
     /**

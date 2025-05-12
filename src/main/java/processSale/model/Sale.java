@@ -22,8 +22,9 @@ public class Sale {
      */
     public Sale() {
         this.items = new ItemList();
-        this.timeOfSale = new TimeOfSaleDTO(
-                new SimpleDateFormat("yyyy-MM-dd_HH:mm").format(Calendar.getInstance().getTime()));
+        this.timeOfSale = new TimeOfSaleDTO(new SimpleDateFormat("yyyy-MM-dd_HH:mm").format(Calendar.getInstance().getTime()));
+        this.runningTotal = BigDecimal.ZERO;
+        this.totalVAT = BigDecimal.ZERO;
     }
 
     /**
@@ -53,11 +54,13 @@ public class Sale {
      * @param itemID The unique identifier of the item whose quantity is to be
      *               increased.
      */
-    public void increaseItemQuantity(String itemID) {
+    public String increaseItemQuantity(String itemID) {
         if (items.checkItem(itemID)) {
-            items.increaseQuantity(itemID);
+            String addedItem = items.increaseQuantity(itemID);
             updateSale(items.getItem(itemID));
+            return addedItem + printTotals();
         }
+        return "Item not found in cart.";
     }
 
     /**
@@ -89,9 +92,9 @@ public class Sale {
      * @return The current sale's total cost and VAT as a string.
      */
     private String printTotals() {
-        String updatedTotals = "Total cost (incl. VAT): " + runningTotal.toString() + " SEK%n" +
-                               "Total VAT: " + totalVAT.toString() + " SEK%n%n";
-        return updatedTotals;
+        return String.format("Total cost (incl. VAT): %.2f SEK%n" +
+                             "Total VAT: %.2f SEK%n%n",
+                             runningTotal, totalVAT);
     }
 
     /**
@@ -110,12 +113,17 @@ public class Sale {
      * @return A {@link SaleSummaryDTO} containing the sale details, payment info,
      *         and purchased items.
      */
-    public SaleSummaryDTO processSale(BigDecimal amountPaid) {
-        ProcessPayment processedPayment = new ProcessPayment(amountPaid, runningTotal);
-        PaymentInfoDTO paymentInfo = new PaymentInfoDTO(amountPaid,
-                                                        processedPayment.getChange(),
-                                                        runningTotal,
-                                                        totalVAT);
-        return new SaleSummaryDTO(timeOfSale, items.getBoughtItemsDTO(), paymentInfo);
+    public SaleSummaryDTO processSale(BigDecimal amountPaid) throws InsufficientPaymentException {
+        try {
+            ProcessPayment processedPayment = new ProcessPayment(amountPaid, runningTotal);
+            PaymentInfoDTO paymentInfo = new PaymentInfoDTO(amountPaid,
+                                                            processedPayment.getChange(),
+                                                            runningTotal,
+                                                            totalVAT);
+            return new SaleSummaryDTO(timeOfSale, items.getBoughtItemsDTO(), paymentInfo);
+        } catch (InsufficientPaymentException e) {
+            throw e;
+        }
+        
     }
 }

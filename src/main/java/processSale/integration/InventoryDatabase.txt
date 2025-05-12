@@ -1,0 +1,5 @@
+Pizza 1 Frozen_pizza. 29.90 0.25
+Bread 2 Fresh_bread. 19.90 0.12
+Soda 3 Refreshing_cold_beverage. 15.9 0.20
+Milk 4 Old_milk_yuck. 12.5 0.10
+Game 5 Banger_game_ofc. 299.0 0.30

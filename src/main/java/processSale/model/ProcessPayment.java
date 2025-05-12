@@ -16,8 +16,13 @@ class ProcessPayment {
      * @param amountPaid The amount paid by the customer.
      * @param totalPrice The total price of the sale.
      */
-    public ProcessPayment(BigDecimal amountPaid, BigDecimal totalPrice) {
-        this.changeToGiveBack = calculateChange(amountPaid, totalPrice);
+    public ProcessPayment(BigDecimal amountPaid, BigDecimal totalPrice) throws InsufficientPaymentException{
+        try {
+            this.changeToGiveBack = calculateChange(amountPaid, totalPrice);
+        } catch (InsufficientPaymentException e) {
+            throw e;
+        }
+        
     }
 
     /**
@@ -27,8 +32,13 @@ class ProcessPayment {
      * @param totalPrice The total price of the sale.
      * @return The calculated change.
      */
-    private BigDecimal calculateChange(BigDecimal amountPaid, BigDecimal totalPrice) {
-        return amountPaid.subtract(totalPrice);
+    private BigDecimal calculateChange(BigDecimal amountPaid, BigDecimal totalPrice) throws InsufficientPaymentException {
+        BigDecimal changeToGiveBack = amountPaid.subtract(totalPrice);
+        if (changeToGiveBack.compareTo(BigDecimal.ZERO) > 0) {
+            throw new InsufficientPaymentException("The calculated change resulted in a BigDecimal value less than zero: " +
+                                                   amountPaid + " - " + totalPrice + " = " + changeToGiveBack + ".", changeToGiveBack);
+        }
+        return changeToGiveBack;
     }
 
     /**

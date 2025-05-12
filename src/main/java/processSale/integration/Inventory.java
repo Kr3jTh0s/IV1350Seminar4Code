@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.math.BigDecimal;
 
+import src.main.java.processSale.model.ItemNotFoundException;
 import src.main.java.processSale.model.dto.*;
 
 /**
@@ -22,7 +23,7 @@ public class Inventory {
      * VATRate.
      */
     public Inventory() {
-        inventoryDatabase = new File("acc.txt");
+        inventoryDatabase = new File("src\\main\\java\\processSale\\integration\\InventoryDatabase.txt");
         items = new ItemDTO[6]; // Assuming a fixed size for simplicity
 
         try (Scanner myReader = new Scanner(inventoryDatabase)) {
@@ -53,13 +54,13 @@ public class Inventory {
      * @param itemID The unique identifier of the item.
      * @return The {@link ItemDTO} object if found, otherwise {@code null}.
      */
-    public ItemDTO getItem(String itemID) {
+    public ItemDTO getItem(String itemID) throws ItemNotFoundException {
         for (ItemDTO item : items) {
             if (item != null && item.getID().equalsIgnoreCase(itemID)) {
                 return item;
             }
         }
-        return null; // Item not found
+        throw new ItemNotFoundException("Item with identifier '" + itemID + "' could not be found.");
     }
 
     /**
