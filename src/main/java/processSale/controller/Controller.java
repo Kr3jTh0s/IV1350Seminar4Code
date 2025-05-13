@@ -1,6 +1,7 @@
 package src.main.java.processSale.controller;
 
 import java.math.BigDecimal;
+import java.net.ConnectException;
 
 import src.main.java.processSale.integration.*;
 import src.main.java.processSale.model.*;
@@ -20,6 +21,7 @@ public class Controller {
     private Account externalAccounting;      // Handles accounting operations
     private Sale currentSale; // Represents the ongoing sale
     private RegisterCashCompartment cashRegister;
+    private Logger logger;
 
     /**
      * Initializes the Controller with the required external system dependencies.
@@ -47,6 +49,10 @@ public class Controller {
         this.view = view;
     }
 
+    private void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
     /**
      * Starts a new sale by creating a new `Sale` instance and initializing the
      * receipt.
@@ -69,10 +75,24 @@ public class Controller {
             view.displayAddedItem(currentSale.increaseItemQuantity(itemID));
         } else {
             try {
+
+                //inventory.getItem("nonexisitingid") throw.
+                
+                if (itemID.equalsIgnoreCase("error")) {
+                    throw new ConnectException();
+                }
                 ItemDTO searchedItem = externalInventory.getItem(itemID);
                 view.displayAddedItem(currentSale.addItem(searchedItem));
             } catch (ItemNotFoundException e) {
-                view.itemNotFound(itemID);
+                setLogger(new ErrorView());
+                logger.logItemNotFound(itemID);
+                setLogger(new FileLogger());
+                logger.logItemNotFound(itemID);
+            } catch (ConnectException e) {
+                setLogger(new ErrorView());
+                logger.logConnectionError("External Inventory System");
+                setLogger(new FileLogger());
+                logger.logConnectionError("External Inventory System");
             }
         }
     }
@@ -103,8 +123,10 @@ public class Controller {
             externalInventory.updateInventory(saleSummary);
             externalAccounting.accountSale(saleSummary);
         } catch (InsufficientPaymentException e) {
-            view.displayInsufficientPayment(e.getAmountBelowTotalPrice());
+            setLogger(new ErrorView());
+            logger.logInsufficientPayment(e.getAmountBelowTotalPrice());
+            setLogger(new FileLogger());
+            logger.logInsufficientPayment(e.getAmountBelowTotalPrice());
         }
-        
     }
 }

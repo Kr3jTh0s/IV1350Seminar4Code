@@ -2,9 +2,9 @@ package src.main.java.processSale.view;
 
 import java.math.BigDecimal;
 
-import src.main.java.processSale.model.Observer;
+import src.main.java.processSale.model.RevenueObserver;
 
-public class TotalRevenueView implements Observer {
+public class TotalRevenueView implements RevenueObserver {
 
     public TotalRevenueView() {
     }

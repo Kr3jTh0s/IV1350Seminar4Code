@@ -4,13 +4,13 @@ import java.math.BigDecimal;
 
 public class RegisterCashCompartment {
     private BigDecimal totalCashInRegister;
-    private Observer observer;
+    private RevenueObserver observer;
 
     public RegisterCashCompartment(){
         totalCashInRegister = BigDecimal.ZERO;
     }
     
-    public void setObserver(Observer observer) {
+    public void setObserver(RevenueObserver observer) {
         this.observer = observer;
     }
 

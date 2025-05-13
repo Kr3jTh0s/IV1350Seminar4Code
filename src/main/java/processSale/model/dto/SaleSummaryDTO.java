@@ -47,7 +47,7 @@ public class SaleSummaryDTO {
     /**
      * Retrieves the total amount paid by the customer.
      * 
-     * @return The amount paid as a double.
+     * @return The amount paid as a BigDecimal.
      */
     public BigDecimal getAmountPaid() {
         return paymentInfo.getAmountPaid();
@@ -56,7 +56,7 @@ public class SaleSummaryDTO {
     /**
      * Retrieves the change to give back to the customer.
      * 
-     * @return The change amount as a double.
+     * @return The change amount as a BigDecimal.
      */
     public BigDecimal getChange() {
         return paymentInfo.getChangeToGiveBack();
@@ -65,7 +65,7 @@ public class SaleSummaryDTO {
     /**
      * Retrieves the total price of the sale, including VAT.
      * 
-     * @return The total price as a double.
+     * @return The total price as a BigDecimal.
      */
     public BigDecimal getTotalPrice() {
         return paymentInfo.getTotalPrice();
@@ -74,7 +74,7 @@ public class SaleSummaryDTO {
     /**
      * Retrieves the total VAT for the sale.
      * 
-     * @return The total VAT as a double.
+     * @return The total VAT as a BigDecimal.
      */
     public BigDecimal getTotalVAT() {
         return paymentInfo.getTotalVAT();

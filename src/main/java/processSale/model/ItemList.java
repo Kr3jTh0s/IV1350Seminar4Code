@@ -38,12 +38,9 @@ public class ItemList {
      * @param itemID The unique identifier of the item.
      */
     public String increaseQuantity(String itemID) {
-        int quantity = getItemQuantity(itemID);
-        if (quantity != 0) {
-            itemsQuantity.put(itemID, ++quantity);
-            return GetAddedItemPrintOut(getItem(itemID));
-        }
-        return "An error ocurred. Could not add item.";
+        int quantity = getItemQuantity(itemID); 
+        itemsQuantity.put(itemID, ++quantity);
+        return GetAddedItemPrintOut(getItem(itemID));
     }
 
     /**

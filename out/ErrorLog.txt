@@ -1,0 +1,39 @@
+Item not found in inventory: 20
+Item not found in inventory: 7
+Item not found in inventory: 8
+Connection could not be established with External Inventory System. Please try again later.
+
+Insufficient payemnt. The payed amount is -2.5 below total price.
+Item not found in inventory: 12
+Connection could not be established with External Inventory System. Please try again later.
+
+Item not found in inventory: poop
+Insufficient payemnt. The payed amount is -24.90 below total price.
+Insufficient payemnt. The payed amount is -19.90 below total price.
+Insufficient payemnt. The payed amount is -14.90 below total price.
+Connection could not be established with External Inventory System. Please try again later.
+
+Insufficient payemnt. The payed amount is -24.90 below total price.
+Insufficient payemnt. The payed amount is -19.90 below total price.
+Insufficient payemnt. The payed amount is -14.90 below total price.
+Connection could not be established with External Inventory System. Please try again later.
+
+Insufficient payemnt. The payed amount is -24.90 below total price.
+Insufficient payemnt. The payed amount is -19.90 below total price.
+Insufficient payemnt. The payed amount is -14.90 below total price.
+Connection could not be established with External Inventory System. Please try again later.
+
+Insufficient payemnt. The payed amount is -24.90 below total price.
+Insufficient payemnt. The payed amount is -19.90 below total price.
+Insufficient payemnt. The payed amount is -14.90 below total price.
+Connection could not be established with External Inventory System. Please try again later.
+
+Insufficient payemnt. The payed amount is -24.90 below total price.
+Insufficient payemnt. The payed amount is -19.90 below total price.
+Insufficient payemnt. The payed amount is -14.90 below total price.
+Connection could not be established with External Inventory System. Please try again later.
+
+Item not found in inventory: 10
+Insufficient payemnt. The payed amount is -24.90 below total price.
+Insufficient payemnt. The payed amount is -19.90 below total price.
+Insufficient payemnt. The payed amount is -14.90 below total price.

@@ -36,10 +36,11 @@ class Receipt {
         HashMap<ItemDTO, Integer> boughtItems = saleSummary.getBoughtItems();
         StringBuilder items = new StringBuilder();
         boughtItems.forEach((itemDTO, quantity) -> {
-            items.append(String.format("%s %d x %.2f = " + itemDTO.getPrice().multiply(BigDecimal.valueOf(quantity)).toString() + " SEK%n",
+            items.append(String.format("%s %d x %.2f = %.2f SEK%n",
                     itemDTO.getName(),
                     quantity,
-                    itemDTO.getPrice()));
+                    itemDTO.getPrice(),
+                    itemDTO.getPrice().multiply(BigDecimal.valueOf(quantity))));
         });
 
         // Print the receipt

@@ -7,6 +7,8 @@ import src.main.java.processSale.model.dto.ItemDTO;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.BigDecimal;
+
 /**
  * Unit tests for the {@link ItemList} class.
  */
@@ -21,8 +23,8 @@ class ItemListTest {
     @BeforeEach
     void setUp() {
         itemList = new ItemList();
-        testItem1 = new ItemDTO("Apple", "001", "Fresh red apple", 10.0, 0.12);
-        testItem2 = new ItemDTO("Banana", "002", "Yellow banana", 15.0, 0.06);
+        testItem1 = new ItemDTO("Apple", "001", "Fresh red apple", new BigDecimal(10.0),new BigDecimal(0.12));
+        testItem2 = new ItemDTO("Banana", "002", "Yellow banana", new BigDecimal(15.0),new BigDecimal(0.06));
     }
 
     /**

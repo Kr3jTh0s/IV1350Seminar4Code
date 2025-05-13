@@ -57,12 +57,9 @@ public class Sale {
      *               increased.
      */
     public String increaseItemQuantity(String itemID) {
-        if (items.checkItem(itemID)) {
-            String addedItem = items.increaseQuantity(itemID);
-            updateSale(items.getItem(itemID));
-            return addedItem + printTotals();
-        }
-        return "Item not found in cart.";
+        String addedItem = items.increaseQuantity(itemID);
+        updateSale(items.getItem(itemID));
+        return addedItem + printTotals();
     }
 
     /**
@@ -116,16 +113,11 @@ public class Sale {
      *         and purchased items.
      */
     public SaleSummaryDTO processSale(BigDecimal amountPaid) throws InsufficientPaymentException {
-        try {
-            ProcessPayment processedPayment = new ProcessPayment(amountPaid, runningTotal, cashRegister);
-            PaymentInfoDTO paymentInfo = new PaymentInfoDTO(amountPaid,
-                                                            processedPayment.getChange(),
-                                                            runningTotal,
-                                                            totalVAT);
-            return new SaleSummaryDTO(timeOfSale, items.getBoughtItemsDTO(), paymentInfo);
-        } catch (InsufficientPaymentException e) {
-            throw e;
-        }
-        
+        ProcessPayment processedPayment = new ProcessPayment(amountPaid, runningTotal, cashRegister);
+        PaymentInfoDTO paymentInfo = new PaymentInfoDTO(amountPaid,
+                                                        processedPayment.getChange(),
+                                                        runningTotal,
+                                                        totalVAT);
+        return new SaleSummaryDTO(timeOfSale, items.getBoughtItemsDTO(), paymentInfo);
     }
 }

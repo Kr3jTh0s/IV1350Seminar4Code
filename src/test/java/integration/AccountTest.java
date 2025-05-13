@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import src.main.java.processSale.integration.Account;
 import src.main.java.processSale.model.dto.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,7 +49,7 @@ class AccountTest {
     void testAccountSaleWithValidSummary() {
         TimeOfSaleDTO time = new TimeOfSaleDTO("2023-05-01_14:30");
         BoughtItemsDTO boughtItems = new BoughtItemsDTO(new HashMap<>());
-        PaymentInfoDTO paymentInfo = new PaymentInfoDTO(100.0, 20.0, 80.0, 10.0);
+        PaymentInfoDTO paymentInfo = new PaymentInfoDTO(new BigDecimal(100.0), new BigDecimal(20.0),new BigDecimal(80.0),new BigDecimal(10.0));
         SaleSummaryDTO summary = new SaleSummaryDTO(time, boughtItems, paymentInfo);
 
         assertDoesNotThrow(() -> account.accountSale(summary), "Recording a sale with valid data should not throw an exception.");

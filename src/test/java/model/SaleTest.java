@@ -3,17 +3,23 @@ package src.test.java.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import src.main.java.processSale.model.InsufficientPaymentException;
+import src.main.java.processSale.model.RegisterCashCompartment;
 import src.main.java.processSale.model.Sale;
 import src.main.java.processSale.model.dto.ItemDTO;
 import src.main.java.processSale.model.dto.SaleSummaryDTO;
+import src.main.java.processSale.view.TotalRevenueView;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.math.BigDecimal;
 
 /**
  * Unit tests for the {@link Sale} class.
  */
 class SaleTest {
     private Sale sale;
+    private RegisterCashCompartment cashRegister;
     private ItemDTO testItem1;
     private ItemDTO testItem2;
 
@@ -22,9 +28,9 @@ class SaleTest {
      */
     @BeforeEach
     void setUp() {
-        sale = new Sale();
-        testItem1 = new ItemDTO("Apple", "001", "Fresh red apple", 10.0, 0.12);
-        testItem2 = new ItemDTO("Banana", "002", "Yellow banana", 15.0, 0.06);
+        sale = new Sale(cashRegister);
+        testItem1 = new ItemDTO("Apple", "001", "Fresh red apple", new BigDecimal(10.0),new BigDecimal(0.12));
+        testItem2 = new ItemDTO("Banana", "002", "Yellow banana", new BigDecimal(15.0),new BigDecimal(0.06));
     }
 
     /**
@@ -33,7 +39,7 @@ class SaleTest {
     @Test
     void testInitialState() {
         assertNotNull(sale.getTimeOfSale(), "Time of sale should not be null.");
-        assertEquals(0.0, sale.getRunningTotal(), "Running total should be 0.0 for a new sale.");
+        assertEquals(new BigDecimal(0.0), sale.getRunningTotal(), "Running total should be 0.0 for a new sale.");
     }
 
     /**
@@ -43,7 +49,7 @@ class SaleTest {
     void testAddNewItem() {
         sale.addItem(testItem1);
         assertTrue(sale.itemExists("001"), "Item should exist after being added.");
-        assertEquals(10.0, sale.getRunningTotal(), "Running total should reflect the item's price.");
+        assertEquals(new BigDecimal(10.0), sale.getRunningTotal(), "Running total should reflect the item's price.");
     }
 
     /**
@@ -53,7 +59,7 @@ class SaleTest {
     void testIncreaseItemQuantity() {
         sale.addItem(testItem1);
         sale.increaseItemQuantity("001");
-        assertEquals(20.0, sale.getRunningTotal(), "Running total should reflect the increased quantity.");
+        assertEquals(new BigDecimal(20.0), sale.getRunningTotal(), "Running total should reflect the increased quantity.");
     }
 
     /**
@@ -71,15 +77,19 @@ class SaleTest {
      * Tests processing a sale and generating a summary.
      */
     @Test
-    void testProcessSale() {
+    void testProcessSale() throws InsufficientPaymentException {
+        cashRegister = new RegisterCashCompartment();
+        sale = new Sale(cashRegister);
+        cashRegister.setObserver(new TotalRevenueView());
+
         sale.addItem(testItem1);
         sale.addItem(testItem2);
 
-        SaleSummaryDTO summary = sale.processSale(30.0);
+        SaleSummaryDTO summary = sale.processSale(new BigDecimal(30.0));
 
-        assertEquals(25.0, summary.getTotalPrice(), "Total price should match the sum of item prices.");
-        assertEquals(30.0, summary.getAmountPaid(), "Amount paid should match the input.");
-        assertEquals(5.0, summary.getChange(), "Change should be correctly calculated.");
+        assertEquals(new BigDecimal(25.0), summary.getTotalPrice(), "Total price should match the sum of item prices.");
+        assertEquals(new BigDecimal(30.0), summary.getAmountPaid(), "Amount paid should match the input.");
+        assertEquals(new BigDecimal(5.0), summary.getChange(), "Change should be correctly calculated.");
         assertEquals(2, summary.getBoughtItems().size(), "Bought items should include all added items.");
     }
 
@@ -90,7 +100,7 @@ class SaleTest {
     void testRunningTotalWithMultipleItems() {
         sale.addItem(testItem1);
         sale.addItem(testItem2);
-        assertEquals(25.0, sale.getRunningTotal(), "Running total should reflect the sum of item prices.");
+        assertEquals(new BigDecimal(25.0), sale.getRunningTotal(), "Running total should reflect the sum of item prices.");
     }
 
     /**
@@ -100,33 +110,32 @@ class SaleTest {
     void testAddSameItemMultipleTimes() {
         sale.addItem(testItem1);
         sale.addItem(testItem1);
-        assertEquals(20.0, sale.getRunningTotal(), "Running total should reflect the price of the item added twice.");
+        assertEquals(new BigDecimal(20.0), sale.getRunningTotal(), "Running total should reflect the price of the item added twice.");
     }
 
     /**
      * Tests processing a sale with insufficient payment.
      */
     @Test
-    void testProcessSaleWithInsufficientPayment() {
+    void testProcessSaleWithInsufficientPayment() throws InsufficientPaymentException{
         sale.addItem(testItem1);
         sale.addItem(testItem2);
-
-        SaleSummaryDTO summary = sale.processSale(20.0);
-
-        assertEquals(25.0, summary.getTotalPrice(), "Total price should match the sum of item prices.");
-        assertEquals(20.0, summary.getAmountPaid(), "Amount paid should match the input.");
-        assertEquals(-5.0, summary.getChange(), "Change should be negative for insufficient payment.");
+        
+        assertThrows(InsufficientPaymentException.class, () -> sale.processSale(new BigDecimal(20.0)));
     }
 
     /**
      * Tests adding an item with a high VAT rate and verifying the total VAT.
      */
     @Test
-    void testAddItemWithHighVAT() {
-        ItemDTO expensiveItem = new ItemDTO("Luxury Watch", "003", "High-end watch", 1000.0, 0.25);
+    void testAddItemWithHighVAT() throws InsufficientPaymentException {
+        cashRegister = new RegisterCashCompartment();
+        sale = new Sale(cashRegister);
+        cashRegister.setObserver(new TotalRevenueView());
+        ItemDTO expensiveItem = new ItemDTO("Luxury Watch", "003", "High-end watch", new BigDecimal(1000.0),new BigDecimal(0.25));
         sale.addItem(expensiveItem);
 
-        assertEquals(1000.0, sale.getRunningTotal(), "Running total should reflect the item's price.");
-        assertEquals(250.0, sale.processSale(1000.0).getTotalVAT(), "Total VAT should be correctly calculated.");
+        assertEquals(new BigDecimal(1000.0), sale.getRunningTotal(), "Running total should reflect the item's price.");
+        assertEquals(new BigDecimal(250.0), sale.processSale(new BigDecimal(1000.0)).getTotalVAT(), "Total VAT should be correctly calculated.");
     }
 }

@@ -5,12 +5,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 
-class FileLogger implements Observer {
+public class FileLogger implements Logger {
     private PrintWriter logStream;
 
     public FileLogger() {
         try {
-            logStream = new PrintWriter(new FileWriter("out\\TotalRevenueFileOutput.txt"), true);
+            logStream = new PrintWriter(new FileWriter("out\\ErrorLog.txt", true), true);
         } catch (IOException e) {
             System.out.println("PRINT ERROR!");
             e.printStackTrace();
@@ -18,7 +18,15 @@ class FileLogger implements Observer {
     }
 
     @Override
-    public void logSumOfPayments(BigDecimal totalPrice){
-        logStream.printf("New payment recorded. Current cash in register: %.2f SEK%n", totalPrice);
+    public void logItemNotFound(String itemID) {
+        logStream.println("Item not found in inventory: " + itemID);
+    }
+    
+    public void logInsufficientPayment(BigDecimal insufficientPayment) {
+        logStream.println("Insufficient payemnt. The payed amount is " + insufficientPayment + " below total price.");
+    }
+
+    public void logConnectionError(String source) {
+        logStream.println("Connection could not be established with " + source + ". Please try again later.\n");
     }
 }

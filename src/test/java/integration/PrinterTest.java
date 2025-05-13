@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import src.main.java.processSale.integration.Printer;
 import src.main.java.processSale.model.dto.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,11 +28,11 @@ class PrinterTest {
 
         // Mocking a SaleSummaryDTO with dummy data
         HashMap<ItemDTO, Integer> boughtItems = new HashMap<>();
-        boughtItems.put(new ItemDTO("Apple", "001", "Fresh red apple", 10.0, 0.12), 2);
-        boughtItems.put(new ItemDTO("Banana", "002", "Yellow banana", 15.0, 0.06), 1);
+        boughtItems.put(new ItemDTO("Apple", "001", "Fresh red apple",new BigDecimal(10.0), new BigDecimal(0.12)), 2);
+        boughtItems.put(new ItemDTO("Banana", "002", "Yellow banana",new BigDecimal(15.0),new BigDecimal(0.06)), 1);
 
         BoughtItemsDTO boughtItemsDTO = new BoughtItemsDTO(boughtItems);
-        PaymentInfoDTO paymentInfo = new PaymentInfoDTO(50.0, 10.0, 40.0, 5.0);
+        PaymentInfoDTO paymentInfo = new PaymentInfoDTO(new BigDecimal(50.0),new BigDecimal(10.0),new BigDecimal(40.0),new BigDecimal(5.0));
         saleSummary = new SaleSummaryDTO(timeOfSale, boughtItemsDTO, paymentInfo);
     }
 
