@@ -39,7 +39,7 @@ public class View {
         System.out.println("Item not found in inventory: " + itemID);
     }
 
-    public void displayTotalPrice(BigDecimal totalPrice){
+    public void displayTotalPrice(BigDecimal totalPrice) {
         System.out.printf("Sale ended. Total price: %.2f SEK%n", totalPrice);
     }
 
@@ -48,7 +48,7 @@ public class View {
     }
 
     public void displayInsufficientPayment(BigDecimal insufficientPayment) {
-        System.out.println(insufficientPayment);
+        System.out.println("Insufficient payemnt. The payed amount is " + insufficientPayment + " below total price.");
     }
 }
 

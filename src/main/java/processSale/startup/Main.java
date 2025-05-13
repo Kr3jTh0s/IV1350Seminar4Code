@@ -2,6 +2,7 @@ package src.main.java.processSale.startup;
 
 import src.main.java.processSale.controller.*;
 import src.main.java.processSale.integration.*;
+import src.main.java.processSale.model.RegisterCashCompartment;
 import src.main.java.processSale.view.*;
 
 /**
@@ -26,8 +27,11 @@ public class Main {
         Discount discount = new Discount();
         Account account = new Account();
 
+        // Initialize observer and cash register
+        RegisterCashCompartment cashRegister = new RegisterCashCompartment();
+
         // Initialize the controller and view
-        Controller controller = new Controller(printer, inventory, discount, account);
+        Controller controller = new Controller(printer, inventory, discount, account, cashRegister);
         View view = new View(controller);
 
         System.out.println("---------- Startup Complete ----------\n");

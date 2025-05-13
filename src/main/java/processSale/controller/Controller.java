@@ -19,6 +19,7 @@ public class Controller {
     private Discount discountDatabase;    // Handles discount operations
     private Account externalAccounting;      // Handles accounting operations
     private Sale currentSale; // Represents the ongoing sale
+    private RegisterCashCompartment cashRegister;
 
     /**
      * Initializes the Controller with the required external system dependencies.
@@ -28,11 +29,12 @@ public class Controller {
      * @param disc    The discount system for applying discounts.
      * @param acc     The accounting system for recording transactions.
      */
-    public Controller(Printer printer, Inventory externalInventory, Discount discountDatabase, Account externalAccounting) {
+    public Controller(Printer printer, Inventory externalInventory, Discount discountDatabase, Account externalAccounting, RegisterCashCompartment cashRegister) {
         this.printer = printer;
         this.externalInventory = externalInventory;
         this.discountDatabase = discountDatabase;
         this.externalAccounting = externalAccounting;
+        this.cashRegister = cashRegister;
     }
 
     /**
@@ -50,7 +52,8 @@ public class Controller {
      * receipt.
      */
     public void startSale() {
-        currentSale = new Sale();
+        cashRegister.setObserver(new TotalRevenueView());
+        currentSale = new Sale(cashRegister);
         printer.createReceipt(currentSale.getTimeOfSale());
     }
 

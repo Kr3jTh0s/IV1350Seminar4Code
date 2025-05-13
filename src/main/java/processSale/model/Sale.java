@@ -16,15 +16,17 @@ public class Sale {
     private final ItemList items;           // Manages the list of items in the sale
     private BigDecimal runningTotal;        // Tracks the total cost of items in the sale
     private BigDecimal totalVAT;            // Tracks the total VAT for the sale
+    private RegisterCashCompartment cashRegister;
 
     /**
      * Initializes a new sale with the current time and an empty item list.
      */
-    public Sale() {
+    public Sale(RegisterCashCompartment cashRegister) {
         this.items = new ItemList();
         this.timeOfSale = new TimeOfSaleDTO(new SimpleDateFormat("yyyy-MM-dd_HH:mm").format(Calendar.getInstance().getTime()));
         this.runningTotal = BigDecimal.ZERO;
         this.totalVAT = BigDecimal.ZERO;
+        this.cashRegister = cashRegister;
     }
 
     /**
@@ -115,7 +117,7 @@ public class Sale {
      */
     public SaleSummaryDTO processSale(BigDecimal amountPaid) throws InsufficientPaymentException {
         try {
-            ProcessPayment processedPayment = new ProcessPayment(amountPaid, runningTotal);
+            ProcessPayment processedPayment = new ProcessPayment(amountPaid, runningTotal, cashRegister);
             PaymentInfoDTO paymentInfo = new PaymentInfoDTO(amountPaid,
                                                             processedPayment.getChange(),
                                                             runningTotal,

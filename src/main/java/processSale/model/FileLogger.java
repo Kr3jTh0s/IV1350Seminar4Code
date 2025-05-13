@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 
-public class TotalRevenueFileOutput implements Observer{
+class FileLogger implements Observer {
     private PrintWriter logStream;
 
-    public TotalRevenueFileOutput() {
+    public FileLogger() {
         try {
             logStream = new PrintWriter(new FileWriter("out\\TotalRevenueFileOutput.txt"), true);
         } catch (IOException e) {
