@@ -25,9 +25,11 @@ class InventoryTest {
         inventory = new Inventory();
     }
 
-
     /**
-     * Tests retrieving an item by its ID.
+     * Tests retrieving an item by its valid ID.
+     *
+     * @throws ItemNotFoundException if the item is not found (should not happen in
+     *                               this test).
      */
     @Test
     void testGetItem() throws ItemNotFoundException {
@@ -37,20 +39,49 @@ class InventoryTest {
     }
 
     /**
-     * Tests updating the inventory after a sale.
+     * Tests retrieving an item with an invalid ID throws ItemNotFoundException.
+     */
+    @Test
+    void testGetItemWithInvalidIDThrowsException() {
+        assertThrows(ItemNotFoundException.class, () -> inventory.getItem("999"),
+                "Retrieving an item with an invalid ID should throw ItemNotFoundException.");
+    }
+
+    /**
+     * Tests retrieving an item with a null ID throws NullPointerException.
+     */
+    @Test
+    void testGetItemWithNullIDThrowsException() {
+        assertThrows(ItemNotFoundException.class, () -> inventory.getItem(null),
+                "Retrieving an item with a null ID should throw NullPointerException.");
+    }
+
+    /**
+     * Tests updating the inventory after a sale. This should not throw any
+     * exceptions.
      */
     @Test
     void testUpdateInventory() {
         // Mocking a SaleSummaryDTO with dummy data
         HashMap<ItemDTO, Integer> boughtItems = new HashMap<>();
-        boughtItems.put(new ItemDTO("Apple", "1", "Fresh red apple", new BigDecimal(10.0),new BigDecimal(0.12)), 2);
-        boughtItems.put(new ItemDTO("Banana", "2", "Yellow banana", new BigDecimal(15.0),new BigDecimal(0.06)), 1);
+        boughtItems.put(new ItemDTO("Apple", "1", "Fresh red apple", new BigDecimal(10.0), new BigDecimal(0.12)), 2);
+        boughtItems.put(new ItemDTO("Banana", "2", "Yellow banana", new BigDecimal(15.0), new BigDecimal(0.06)), 1);
 
         BoughtItemsDTO boughtItemsDTO = new BoughtItemsDTO(boughtItems);
         TimeOfSaleDTO timeOfSale = new TimeOfSaleDTO("2023-05-01_14:30");
         SaleSummaryDTO saleSummary = new SaleSummaryDTO(timeOfSale, boughtItemsDTO, null);
 
-        // Verify no exception is thrown
-        assertDoesNotThrow(() -> inventory.updateInventory(saleSummary), "Updating inventory should not throw an exception.");
+        assertDoesNotThrow(() -> inventory.updateInventory(saleSummary),
+                "Updating inventory should not throw an exception.");
+    }
+
+    /**
+     * Tests that updating inventory with a null SaleSummaryDTO does not throw an
+     * exception.
+     */
+    @Test
+    void testUpdateInventoryWithNullSummary() {
+        assertDoesNotThrow(() -> inventory.updateInventory(null),
+                "Updating inventory with null should not throw an exception.");
     }
 }

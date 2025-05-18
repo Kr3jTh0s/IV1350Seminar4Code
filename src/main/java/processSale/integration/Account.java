@@ -10,7 +10,7 @@ import src.main.java.processSale.model.dto.SaleSummaryDTO;
 public class Account {
 
     /**
-     * Creates a new instance of the Account system. This constructor 
+     * Creates a new instance of the Account system. This constructor
      * can be extended to initialize accounting-specific settings.
      */
     public Account() {

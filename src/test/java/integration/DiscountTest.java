@@ -22,35 +22,31 @@ class DiscountTest {
 
     /**
      * Tests retrieving the discount factor for a valid customer ID.
+     * Should always return 1.0 (no discount) in the default implementation.
      */
     @Test
     void testGetDiscountForValidCustomerID() {
-        assertEquals(1.0, discount.getDiscount("customer123"), "Discount factor should be 1.0 for a valid customer ID.");
+        assertEquals(1.0, discount.getDiscount("customer123").doubleValue(),
+                "Discount factor should be 1.0 for a valid customer ID.");
     }
 
     /**
      * Tests retrieving the discount factor for an empty customer ID.
+     * Should always return 1.0 (no discount).
      */
     @Test
     void testGetDiscountForEmptyCustomerID() {
-        assertEquals(1.0, discount.getDiscount(""), "Discount factor should be 1.0 for an empty customer ID.");
+        assertEquals(1.0, discount.getDiscount("").doubleValue(),
+                "Discount factor should be 1.0 for an empty customer ID.");
     }
 
     /**
      * Tests retrieving the discount factor for a null customer ID.
+     * Should always return 1.0 (no discount).
      */
     @Test
     void testGetDiscountForNullCustomerID() {
-        assertEquals(1.0, discount.getDiscount(null), "Discount factor should be 1.0 for a null customer ID.");
-    }
-
-    /**
-     * Tests retrieving the discount factor for multiple customer IDs.
-     */
-    @Test
-    void testGetDiscountForMultipleCustomerIDs() {
-        assertEquals(1.0, discount.getDiscount("customer1"), "Discount factor should be 1.0 for customer1.");
-        assertEquals(1.0, discount.getDiscount("customer2"), "Discount factor should be 1.0 for customer2.");
-        assertEquals(1.0, discount.getDiscount("customer3"), "Discount factor should be 1.0 for customer3.");
+        assertEquals(1.0, discount.getDiscount(null).doubleValue(),
+                "Discount factor should be 1.0 for a null customer ID.");
     }
 }

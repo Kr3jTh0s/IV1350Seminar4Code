@@ -10,7 +10,7 @@ public class Printer {
 
     /**
      * Creates a new instance of the Printer.
-     * This constructor can be extended to initialize printer-specific settings.
+     * Prints a message indicating that the printer has been initialized.
      */
     public Printer() {
         System.out.println("Printer initialized");
@@ -18,28 +18,32 @@ public class Printer {
 
     /**
      * Creates a new receipt for the current sale.
-     * 
+     *
      * @param timeOfSale The timestamp of the sale, encapsulated in a
      *                   {@link TimeOfSaleDTO}.
+     * @throws NullPointerException if {@code timeOfSale} is {@code null}.
      */
     public void createReceipt(TimeOfSaleDTO timeOfSale) {
+        if (timeOfSale == null) {
+            throw new NullPointerException("TimeOfSaleDTO cannot be null when creating a receipt.");
+        }
         currentReceipt = new Receipt(timeOfSale);
     }
 
     /**
      * Prints the receipt for the completed sale.
-     * 
+     *
      * @param saleSummaryDTO A {@link SaleSummaryDTO} containing the details of the
      *                       completed sale.
+     * @throws IllegalStateException if no receipt has been created before printing.
+     * @throws NullPointerException  if {@code saleSummaryDTO} is {@code null}.
      */
     public void printReceipt(SaleSummaryDTO saleSummaryDTO) {
         if (currentReceipt == null) {
-            System.out.println("No receipt has been created. Please create a receipt first.");
-            return;
+            throw new IllegalStateException("No receipt has been created. Please create a receipt first.");
         }
         if (saleSummaryDTO == null) {
-            System.out.println("Sale summary is null.");
-            return;
+            throw new NullPointerException("SaleSummaryDTO cannot be null when printing a receipt.");
         }
         currentReceipt.printReceipt(saleSummaryDTO);
     }

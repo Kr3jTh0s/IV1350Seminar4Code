@@ -15,21 +15,29 @@ class Receipt {
 
     /**
      * Creates a new instance of Receipt with the specified time of sale.
-     * 
+     *
      * @param timeOfSale A {@link TimeOfSaleDTO} containing the timestamp of the
      *                   sale.
+     * @throws NullPointerException if {@code timeOfSale} is {@code null}.
      */
     public Receipt(TimeOfSaleDTO timeOfSale) {
+        if (timeOfSale == null) {
+            throw new NullPointerException("TimeOfSaleDTO cannot be null.");
+        }
         this.timeOfSale = timeOfSale.getTimeStamp();
     }
 
     /**
-     * Prints the receipt for the completed sale.
-     * 
+     * Prints the receipt for the completed sale to the console.
+     *
      * @param saleSummary A {@link SaleSummaryDTO} containing the details of the
      *                    completed sale.
+     * @throws NullPointerException if {@code saleSummary} is {@code null}.
      */
     public void printReceipt(SaleSummaryDTO saleSummary) {
+        if (saleSummary == null) {
+            throw new NullPointerException("SaleSummaryDTO cannot be null.");
+        }
         this.saleSummary = saleSummary;
 
         // Build the list of purchased items
@@ -47,7 +55,7 @@ class Receipt {
         System.out.println("------------------ Begin receipt -------------------");
         System.out.println("Time of Sale: " + timeOfSale);
         System.out.println();
-        System.out.println(items.toString());
+        System.out.print(items);
         System.out.printf("Total: %.2f SEK%n", saleSummary.getTotalPrice());
         System.out.printf("VAT: %.2f SEK%n", saleSummary.getTotalVAT());
         System.out.println();

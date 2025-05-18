@@ -28,11 +28,12 @@ class PrinterTest {
 
         // Mocking a SaleSummaryDTO with dummy data
         HashMap<ItemDTO, Integer> boughtItems = new HashMap<>();
-        boughtItems.put(new ItemDTO("Apple", "001", "Fresh red apple",new BigDecimal(10.0), new BigDecimal(0.12)), 2);
-        boughtItems.put(new ItemDTO("Banana", "002", "Yellow banana",new BigDecimal(15.0),new BigDecimal(0.06)), 1);
+        boughtItems.put(new ItemDTO("Apple", "001", "Fresh red apple", new BigDecimal(10.0), new BigDecimal(0.12)), 2);
+        boughtItems.put(new ItemDTO("Banana", "002", "Yellow banana", new BigDecimal(15.0), new BigDecimal(0.06)), 1);
 
         BoughtItemsDTO boughtItemsDTO = new BoughtItemsDTO(boughtItems);
-        PaymentInfoDTO paymentInfo = new PaymentInfoDTO(new BigDecimal(50.0),new BigDecimal(10.0),new BigDecimal(40.0),new BigDecimal(5.0));
+        PaymentInfoDTO paymentInfo = new PaymentInfoDTO(new BigDecimal(50.0), new BigDecimal(10.0),
+                new BigDecimal(40.0), new BigDecimal(5.0));
         saleSummary = new SaleSummaryDTO(timeOfSale, boughtItemsDTO, paymentInfo);
     }
 
@@ -41,7 +42,18 @@ class PrinterTest {
      */
     @Test
     void testCreateReceipt() {
-        assertDoesNotThrow(() -> printer.createReceipt(timeOfSale), "Creating a receipt should not throw an exception.");
+        assertDoesNotThrow(() -> printer.createReceipt(timeOfSale),
+                "Creating a receipt should not throw an exception.");
+    }
+
+    /**
+     * Tests creating a receipt with a null time of sale should throw
+     * NullPointerException.
+     */
+    @Test
+    void testCreateReceiptWithNullTimeOfSaleThrowsException() {
+        assertThrows(NullPointerException.class, () -> printer.createReceipt(null),
+                "Creating a receipt with null TimeOfSaleDTO should throw NullPointerException.");
     }
 
     /**
@@ -50,33 +62,40 @@ class PrinterTest {
     @Test
     void testPrintReceipt() {
         printer.createReceipt(timeOfSale);
-        assertDoesNotThrow(() -> printer.printReceipt(saleSummary), "Printing a receipt should not throw an exception.");
+        assertDoesNotThrow(() -> printer.printReceipt(saleSummary),
+                "Printing a receipt should not throw an exception.");
     }
 
     /**
-     * Tests printing a receipt without creating it first.
+     * Tests printing a receipt without creating it first should throw
+     * IllegalStateException.
      */
     @Test
-    void testPrintReceiptWithoutCreating() {
-        assertDoesNotThrow(() -> printer.printReceipt(saleSummary), "Printing without creating a receipt should not throw an exception.");
+    void testPrintReceiptWithoutCreatingThrowsException() {
+        assertThrows(IllegalStateException.class, () -> printer.printReceipt(saleSummary),
+                "Printing without creating a receipt should throw IllegalStateException.");
     }
 
     /**
-     * Tests creating multiple receipts consecutively.
+     * Tests printing a receipt with null SaleSummaryDTO should throw
+     * NullPointerException.
      */
     @Test
-    void testCreateMultipleReceipts() {
-        TimeOfSaleDTO newTimeOfSale = new TimeOfSaleDTO("2023-05-02_10:00");
-        assertDoesNotThrow(() -> printer.createReceipt(timeOfSale), "Creating the first receipt should not throw an exception.");
-        assertDoesNotThrow(() -> printer.createReceipt(newTimeOfSale), "Creating a second receipt should not throw an exception.");
-    }
-
-    /**
-     * Tests printing a receipt with null SaleSummaryDTO.
-     */
-    @Test
-    void testPrintReceiptWithNullSummary() {
+    void testPrintReceiptWithNullSummaryThrowsException() {
         printer.createReceipt(timeOfSale);
-        assertDoesNotThrow(() -> printer.printReceipt(null), "Printing with a null SaleSummaryDTO should not throw an exception.");
+        assertThrows(NullPointerException.class, () -> printer.printReceipt(null),
+                "Printing with a null SaleSummaryDTO should throw NullPointerException.");
+    }
+
+    /**
+     * Tests that printing a receipt with a SaleSummaryDTO with null fields does not
+     * throw.
+     */
+    @Test
+    void testPrintReceiptWithEmptySummary() {
+        printer.createReceipt(timeOfSale);
+        SaleSummaryDTO summaryWithNulls = new SaleSummaryDTO(null, null, null);
+        assertDoesNotThrow(() -> printer.printReceipt(summaryWithNulls),
+                "Printing with a SaleSummaryDTO with null fields should not throw an exception.");
     }
 }

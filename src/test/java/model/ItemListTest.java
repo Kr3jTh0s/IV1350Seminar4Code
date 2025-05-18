@@ -23,8 +23,8 @@ class ItemListTest {
     @BeforeEach
     void setUp() {
         itemList = new ItemList();
-        testItem1 = new ItemDTO("Apple", "001", "Fresh red apple", new BigDecimal(10.0),new BigDecimal(0.12));
-        testItem2 = new ItemDTO("Banana", "002", "Yellow banana", new BigDecimal(15.0),new BigDecimal(0.06));
+        testItem1 = new ItemDTO("Apple", "001", "Fresh red apple", new BigDecimal(10.0), new BigDecimal(0.12));
+        testItem2 = new ItemDTO("Banana", "002", "Yellow banana", new BigDecimal(15.0), new BigDecimal(0.06));
     }
 
     /**
@@ -38,6 +38,25 @@ class ItemListTest {
     }
 
     /**
+     * Tests adding a null item throws IllegalArgumentException.
+     */
+    @Test
+    void testAddNullItemThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> itemList.addNewItem(null),
+                "Adding null item should throw IllegalArgumentException.");
+    }
+
+    /**
+     * Tests adding the same item twice throws IllegalArgumentException.
+     */
+    @Test
+    void testAddSameItemTwiceThrowsException() {
+        itemList.addNewItem(testItem1);
+        assertThrows(IllegalArgumentException.class, () -> itemList.addNewItem(testItem1),
+                "Adding the same item again should throw IllegalArgumentException.");
+    }
+
+    /**
      * Tests increasing the quantity of an existing item in the list.
      */
     @Test
@@ -45,6 +64,16 @@ class ItemListTest {
         itemList.addNewItem(testItem1);
         itemList.increaseQuantity("001");
         assertEquals(2, itemList.getBoughtItemsDTO().getBoughtItems().get(testItem1), "Item quantity should be 2.");
+    }
+
+    /**
+     * Tests increasing the quantity of a non-existent item throws
+     * IllegalArgumentException.
+     */
+    @Test
+    void testIncreaseQuantityForNonExistentItemThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> itemList.increaseQuantity("999"),
+                "Increasing quantity for non-existent item should throw IllegalArgumentException.");
     }
 
     /**
@@ -76,28 +105,12 @@ class ItemListTest {
     void testGetBoughtItemsDTO() {
         itemList.addNewItem(testItem1);
         itemList.addNewItem(testItem2);
-        assertEquals(2, itemList.getBoughtItemsDTO().getBoughtItems().size(), "BoughtItemsDTO should contain all items.");
-        assertTrue(itemList.getBoughtItemsDTO().getBoughtItems().containsKey(testItem1), "BoughtItemsDTO should contain testItem1.");
-        assertTrue(itemList.getBoughtItemsDTO().getBoughtItems().containsKey(testItem2), "BoughtItemsDTO should contain testItem2.");
-    }
-
-    /**
-     * Tests adding the same item multiple times and verifying the total quantity.
-     */
-    @Test
-    void testAddSameItemMultipleTimes() {
-        itemList.addNewItem(testItem1);
-        itemList.addNewItem(testItem1);
-        assertEquals(1, itemList.getBoughtItemsDTO().getBoughtItems().get(testItem1), "Adding the same item again should not increase quantity.");
-    }
-
-    /**
-     * Tests increasing the quantity of a non-existent item.
-     */
-    @Test
-    void testIncreaseQuantityForNonExistentItem() {
-        itemList.increaseQuantity("999");
-        assertFalse(itemList.checkItem("999"), "Non-existent item should not be added when increasing quantity.");
+        assertEquals(2, itemList.getBoughtItemsDTO().getBoughtItems().size(),
+                "BoughtItemsDTO should contain all items.");
+        assertTrue(itemList.getBoughtItemsDTO().getBoughtItems().containsKey(testItem1),
+                "BoughtItemsDTO should contain testItem1.");
+        assertTrue(itemList.getBoughtItemsDTO().getBoughtItems().containsKey(testItem2),
+                "BoughtItemsDTO should contain testItem2.");
     }
 
     /**
@@ -105,6 +118,7 @@ class ItemListTest {
      */
     @Test
     void testGetBoughtItemsDTOWhenEmpty() {
-        assertEquals(0, itemList.getBoughtItemsDTO().getBoughtItems().size(), "BoughtItemsDTO should be empty initially.");
+        assertEquals(0, itemList.getBoughtItemsDTO().getBoughtItems().size(),
+                "BoughtItemsDTO should be empty initially.");
     }
 }

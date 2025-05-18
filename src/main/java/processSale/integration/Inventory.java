@@ -20,7 +20,7 @@ public class Inventory {
     /**
      * Initializes the inventory system by loading item data from a file.
      * The file must contain item data in the format: name ID description price
-     * VATRate.
+     * VATRate. Prints an error message if the file cannot be found.
      */
     public Inventory() {
         inventoryDatabase = new File("src\\main\\java\\processSale\\integration\\InventoryDatabase.txt");
@@ -28,8 +28,7 @@ public class Inventory {
 
         try (Scanner myReader = new Scanner(inventoryDatabase)) {
             int rowNumber = 0;
-
-            while (myReader.hasNextLine()) {
+            while (myReader.hasNextLine() && rowNumber < items.length) {
                 String[] row = myReader.nextLine().split(" ");
                 ItemDTO item = new ItemDTO(
                         row[0], // Name
@@ -50,9 +49,11 @@ public class Inventory {
 
     /**
      * Retrieves an item from the inventory based on its unique identifier.
-     * 
+     *
      * @param itemID The unique identifier of the item.
-     * @return The {@link ItemDTO} object if found, otherwise {@code null}.
+     * @return The {@link ItemDTO} object if found.
+     * @throws ItemNotFoundException if the item with the specified ID is not found
+     *                               in the inventory.
      */
     public ItemDTO getItem(String itemID) throws ItemNotFoundException {
         for (ItemDTO item : items) {
@@ -60,12 +61,14 @@ public class Inventory {
                 return item;
             }
         }
-        throw new ItemNotFoundException("Item with identifier '" + itemID + "' could not be found.");
+        throw new ItemNotFoundException(
+                "Item with identifier '" + itemID + "' could not be found in External Inventory System.", itemID);
     }
 
     /**
-     * Updates the inventory after a sale.
-     * 
+     * Updates the inventory after a sale. This implementation only prints a
+     * message, but could be extended to update actual inventory data.
+     *
      * @param saleSummaryDTO A {@link SaleSummaryDTO} containing details of the
      *                       completed sale.
      */

@@ -2,23 +2,35 @@ package src.main.java.processSale.model;
 
 import java.math.BigDecimal;
 
+/**
+ * Thrown to indicate that the payment provided by the customer is insufficient
+ * to cover the total price of the sale. This is a checked exception (subclass
+ * of Exception).
+ */
 public class InsufficientPaymentException extends Exception {
 
-    //Do not need to be caught or declared.
-    //Typically represent programming errors (e.g., null pointers, out-of-bounds).
-    //Subclasses of RuntimeException.
-    //Compiler does not enforce handling.
+    private final BigDecimal amountBelowTotalPrice;
 
-    //pay how much u want: bajs
-
-    private BigDecimal amountBelowTotalPrice;
-
-    public InsufficientPaymentException(String msg, BigDecimal amountBelowTotalPrice){
+    /**
+     * Constructs a new InsufficientPaymentException with the specified detail
+     * message and the amount by which the payment is below the total price.
+     *
+     * @param msg                   The detail message explaining the reason for the
+     *                              exception.
+     * @param amountBelowTotalPrice The amount by which the payment is less than the
+     *                              total price.
+     */
+    public InsufficientPaymentException(String msg, BigDecimal amountBelowTotalPrice) {
         super(msg);
         this.amountBelowTotalPrice = amountBelowTotalPrice;
     }
 
-    public BigDecimal getAmountBelowTotalPrice(){
+    /**
+     * Returns the amount by which the payment is below the total price.
+     *
+     * @return The insufficient payment amount.
+     */
+    public BigDecimal getAmountBelowTotalPrice() {
         return amountBelowTotalPrice;
     }
 }

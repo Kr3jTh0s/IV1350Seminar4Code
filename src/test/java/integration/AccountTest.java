@@ -25,33 +25,39 @@ class AccountTest {
     }
 
     /**
-     * Tests recording a sale in the accounting system.
-     */
-    @Test
-    void testAccountSale() {
-        SaleSummaryDTO summary = new SaleSummaryDTO(null, null, null);
-
-        assertDoesNotThrow(() -> account.accountSale(summary), "Recording a sale should not throw an exception.");
-    }
-
-    /**
-     * Tests recording a sale with a null SaleSummaryDTO.
+     * Tests recording a sale in the accounting system with a null SaleSummaryDTO.
+     * Should not throw any exception.
      */
     @Test
     void testAccountSaleWithNullSummary() {
-        assertDoesNotThrow(() -> account.accountSale(null), "Recording a sale with a null summary should not throw an exception.");
+        assertDoesNotThrow(() -> account.accountSale(null),
+                "Recording a sale with a null summary should not throw an exception.");
     }
 
     /**
-     * Tests recording a sale with valid SaleSummaryDTO data.
+     * Tests recording a sale in the accounting system with an empty SaleSummaryDTO.
+     * Should not throw any exception.
+     */
+    @Test
+    void testAccountSaleWithEmptySummary() {
+        SaleSummaryDTO summary = new SaleSummaryDTO(null, null, null);
+        assertDoesNotThrow(() -> account.accountSale(summary),
+                "Recording a sale with an empty summary should not throw an exception.");
+    }
+
+    /**
+     * Tests recording a sale with valid SaleSummaryDTO data. Should not throw any
+     * exception.
      */
     @Test
     void testAccountSaleWithValidSummary() {
         TimeOfSaleDTO time = new TimeOfSaleDTO("2023-05-01_14:30");
         BoughtItemsDTO boughtItems = new BoughtItemsDTO(new HashMap<>());
-        PaymentInfoDTO paymentInfo = new PaymentInfoDTO(new BigDecimal(100.0), new BigDecimal(20.0),new BigDecimal(80.0),new BigDecimal(10.0));
+        PaymentInfoDTO paymentInfo = new PaymentInfoDTO(
+                new BigDecimal(100.0), new BigDecimal(20.0), new BigDecimal(80.0), new BigDecimal(10.0));
         SaleSummaryDTO summary = new SaleSummaryDTO(time, boughtItems, paymentInfo);
 
-        assertDoesNotThrow(() -> account.accountSale(summary), "Recording a sale with valid data should not throw an exception.");
+        assertDoesNotThrow(() -> account.accountSale(summary),
+                "Recording a sale with valid data should not throw an exception.");
     }
 }
