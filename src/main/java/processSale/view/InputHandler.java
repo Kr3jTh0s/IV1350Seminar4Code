@@ -140,14 +140,17 @@ class InputHandler {
     private int autoRegister() {
         controller.startSale();
         controller.registerItem("1");
-        controller.registerItem("5");
-        controller.registerItem("4");
         controller.registerItem("1");
         controller.registerItem("5");
-        controller.registerItem("3");
+        controller.registerItem("8");
         controller.registerItem("error");
         controller.endSale("null");
-        controller.processSale(BigDecimal.valueOf(700));
+        controller.processSale(BigDecimal.valueOf(300));
+        controller.processSale(BigDecimal.valueOf(400));
+        controller.startSale();
+        controller.registerItem("2");
+        controller.endSale("null");
+        controller.processSale(BigDecimal.valueOf(20));
         return 1;
     }
 
