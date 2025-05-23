@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 import src.main.java.processSale.controller.Controller;
+import src.main.java.processSale.model.ItemNotFoundException;
 
 /**
  * Handles user input for the console-based interface.
@@ -116,7 +117,11 @@ class InputHandler {
                 case EXIT -> 5;
             };
         }
-        controller.registerItem(input);
+        try {
+            controller.registerItem(input);
+        } catch (ItemNotFoundException e) {
+            controller.logItemNotFound(e);
+        }
         return 2;
     }
 
@@ -138,19 +143,27 @@ class InputHandler {
      * Automates a sale for quick testing.
      */
     private int autoRegister() {
-        controller.startSale();
-        controller.registerItem("1");
-        controller.registerItem("1");
-        controller.registerItem("5");
-        controller.registerItem("8");
-        controller.registerItem("error");
-        controller.endSale("null");
-        controller.processSale(BigDecimal.valueOf(300));
-        controller.processSale(BigDecimal.valueOf(400));
-        controller.startSale();
-        controller.registerItem("2");
-        controller.endSale("null");
-        controller.processSale(BigDecimal.valueOf(20));
+        try {
+            controller.startSale();
+            controller.registerItem("1");
+            controller.registerItem("1");
+            controller.registerItem("5");
+            controller.registerItem("8");
+        } catch (ItemNotFoundException e) {
+            controller.logItemNotFound(e);
+        }
+        try {
+            controller.registerItem("error");
+            controller.endSale("null");
+            controller.processSale(BigDecimal.valueOf(300));
+            controller.processSale(BigDecimal.valueOf(400));
+            controller.startSale();
+            controller.registerItem("2");
+            controller.endSale("null");
+            controller.processSale(BigDecimal.valueOf(20));
+        } catch (ItemNotFoundException e) {
+            controller.logItemNotFound(e);
+        }
         return 1;
     }
 

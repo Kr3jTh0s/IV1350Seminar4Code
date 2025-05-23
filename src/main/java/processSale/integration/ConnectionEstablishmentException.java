@@ -1,4 +1,4 @@
-package src.main.java.processSale.controller;
+package src.main.java.processSale.integration;
 
 /**
  * Thrown to indicate that a connection to an external system could not be

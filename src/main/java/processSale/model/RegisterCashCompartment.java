@@ -1,6 +1,11 @@
 package src.main.java.processSale.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import src.main.java.processSale.view.TotalRevenueFileOutput;
 
 /**
  * Represents the cash compartment of the register.
@@ -8,14 +13,15 @@ import java.math.BigDecimal;
  * revenue updates.
  */
 public class RegisterCashCompartment {
-    private BigDecimal totalCashInRegister; // Total cash in the register
-    private RevenueObserver observer;       // Handles logging total cash to user and file
+    private BigDecimal totalCashInRegister;     // Total cash in the register
+    private List<RevenueObserver> observers;    // Handles logging total cash to user and file
 
     /**
      * Constructs a new RegisterCashCompartment with zero initial cash.
      */
     public RegisterCashCompartment() {
         totalCashInRegister = BigDecimal.ZERO;
+        observers = new ArrayList<>();
     }
 
     /**
@@ -23,8 +29,8 @@ public class RegisterCashCompartment {
      *
      * @param observer The RevenueObserver to notify.
      */
-    public void setObserver(RevenueObserver observer) {
-        this.observer = observer;
+    public void addObserver(RevenueObserver newObserver) {
+        observers.add(newObserver);
     }
 
     /**
@@ -48,11 +54,11 @@ public class RegisterCashCompartment {
      * @throws NullPointerException if observer is null.
      */
     private void notifyObserver() {
-        if (observer == null) {
-            throw new NullPointerException("RevenueObserver is not set.");
+        for(RevenueObserver observer : observers) {
+            if (observer == null) {
+                throw new NullPointerException("RevenueObserver is not set.");
+            }
+            observer.logSumOfPayments(totalCashInRegister);
         }
-        observer.logSumOfPayments(totalCashInRegister);
-        setObserver(new TotalRevenueFileOutput());
-        observer.logSumOfPayments(totalCashInRegister);
     }
 }

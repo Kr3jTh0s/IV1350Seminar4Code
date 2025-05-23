@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import src.main.java.processSale.controller.ConnectionEstablishmentException;
+import src.main.java.processSale.integration.ConnectionEstablishmentException;
 
 /**
  * Logs error messages and events to a file. Implements the Logger interface to

@@ -1,9 +1,11 @@
-package src.main.java.processSale.model;
+package src.main.java.processSale.view;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+
+import src.main.java.processSale.model.RevenueObserver;
 
 /**
  * Logs the total revenue to a file each time a payment is recorded.

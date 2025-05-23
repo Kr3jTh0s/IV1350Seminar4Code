@@ -55,7 +55,14 @@ public class Inventory {
      * @throws ItemNotFoundException if the item with the specified ID is not found
      *                               in the inventory.
      */
-    public ItemDTO getItem(String itemID) throws ItemNotFoundException {
+    public ItemDTO getItem(String itemID) throws ItemNotFoundException, ConnectionEstablishmentException {
+
+        if (itemID.equalsIgnoreCase("error")) {
+            throw new ConnectionEstablishmentException(
+                    "External Inventory System socket could not be reached.",
+                    "External Inventory System");
+        }
+
         for (ItemDTO item : items) {
             if (item != null && item.getID().equalsIgnoreCase(itemID)) {
                 return item;

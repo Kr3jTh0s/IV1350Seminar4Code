@@ -60,12 +60,16 @@ public class Controller {
         this.logger = logger;
     }
 
+    public void setObservers (TotalRevenueView trv, TotalRevenueFileOutput trfo) {
+        cashRegister.addObserver(trv);
+        cashRegister.addObserver(trfo);
+    }
+
     /**
      * Starts a new sale by creating a new Sale instance and initializing the
      * receipt. Also sets up the revenue observer for the cash register.
      */
     public void startSale() {
-        cashRegister.setObserver(new TotalRevenueView());
         currentSale = new Sale(cashRegister);
         printer.createReceipt(currentSale.getTimeOfSale());
     }
@@ -76,30 +80,20 @@ public class Controller {
      * inventory system and added to the sale.
      *
      * @param itemID The unique identifier of the item to be registered.
-     * @throws ConnectionEstablishmentException if connection could not be
-     *                                          established with the external
-     *                                          inventory system
+     * @throws ItemNotFoundException 
      */
-    public void registerItem(String itemID) {
+    public void registerItem(String itemID) throws ItemNotFoundException {
         if (currentSale.itemExists(itemID)) {
             view.displayAddedItem(currentSale.increaseItemQuantity(itemID));
             return;
         }
         try {
-            // Simulate a connection error for testing
-            if (itemID.equalsIgnoreCase("error")) {
-                throw new ConnectionEstablishmentException(
-                        "External Inventory System socket could not be reached.",
-                        "External Inventory System");
-            }
             ItemDTO searchedItem = externalInventory.getItem(itemID);
             view.displayAddedItem(currentSale.addItem(searchedItem));
         } catch (IllegalArgumentException e) {
             logIllegalArgumentError(e);
         } catch (ConnectionEstablishmentException e) {
             logConnectionError(e);
-        } catch (ItemNotFoundException e) {
-            logItemNotFound(e);
         }
     }
 
@@ -167,7 +161,7 @@ public class Controller {
      *
      * @param exception The ItemNotFoundException to log.
      */
-    private void logItemNotFound(ItemNotFoundException exception) {
+    public void logItemNotFound(ItemNotFoundException exception) {
         setLogger(new ErrorView());
         logger.logItemNotFound(exception);
         setLogger(new FileLogger());

@@ -1,7 +1,8 @@
 package src.test.java.controller;
 
 import org.junit.jupiter.api.Test;
-import src.main.java.processSale.controller.ConnectionEstablishmentException;
+
+import src.main.java.processSale.integration.ConnectionEstablishmentException;
 
 import static org.junit.jupiter.api.Assertions.*;
 

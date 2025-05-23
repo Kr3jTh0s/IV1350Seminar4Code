@@ -2,7 +2,7 @@ package src.main.java.processSale.model;
 
 import java.math.BigDecimal;
 
-import src.main.java.processSale.controller.ConnectionEstablishmentException;
+import src.main.java.processSale.integration.ConnectionEstablishmentException;
 
 /**
  * Logger interface for handling and displaying error messages or events.

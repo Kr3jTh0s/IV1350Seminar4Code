@@ -24,6 +24,7 @@ public class View {
     public View(Controller controller) {
         this.controller = controller;
         controller.setView(this);
+        controller.setObservers(new TotalRevenueView(), new TotalRevenueFileOutput());
         inputHandler = new InputHandler(controller);
     }
 

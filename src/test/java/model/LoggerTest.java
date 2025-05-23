@@ -2,7 +2,8 @@ package src.test.java.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import src.main.java.processSale.controller.ConnectionEstablishmentException;
+
+import src.main.java.processSale.integration.ConnectionEstablishmentException;
 import src.main.java.processSale.model.*;
 
 import static org.junit.jupiter.api.Assertions.*;

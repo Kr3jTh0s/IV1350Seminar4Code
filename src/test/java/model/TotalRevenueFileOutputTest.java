@@ -3,7 +3,7 @@ package src.test.java.model;
 import org.junit.jupiter.api.*;
 
 import src.main.java.processSale.model.FileLogger;
-import src.main.java.processSale.model.TotalRevenueFileOutput;
+import src.main.java.processSale.view.TotalRevenueFileOutput;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

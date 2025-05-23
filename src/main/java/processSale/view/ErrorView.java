@@ -2,7 +2,7 @@ package src.main.java.processSale.view;
 
 import java.math.BigDecimal;
 
-import src.main.java.processSale.controller.ConnectionEstablishmentException;
+import src.main.java.processSale.integration.ConnectionEstablishmentException;
 import src.main.java.processSale.model.InsufficientPaymentException;
 import src.main.java.processSale.model.ItemNotFoundException;
 import src.main.java.processSale.model.Logger;

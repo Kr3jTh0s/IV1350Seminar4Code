@@ -1,7 +1,8 @@
 package src.test.java.model;
 
 import org.junit.jupiter.api.*;
-import src.main.java.processSale.controller.ConnectionEstablishmentException;
+
+import src.main.java.processSale.integration.ConnectionEstablishmentException;
 import src.main.java.processSale.model.*;
 
 import java.io.*;
