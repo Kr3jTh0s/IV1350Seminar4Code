@@ -17,7 +17,8 @@ public class View {
     /**
      * Creates a new instance of the View class and sets up the connection
      * with the Controller. The Controller is provided as a parameter and
-     * is used to delegate operations initiated by the View.
+     * is used to delegate operations initiated by the View. The observers
+     * are also passed to the controller.
      *
      * @param controller The controller instance to be used by this view.
      */

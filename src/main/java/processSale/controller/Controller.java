@@ -60,7 +60,15 @@ public class Controller {
         this.logger = logger;
     }
 
-    public void setObservers (TotalRevenueView trv, TotalRevenueFileOutput trfo) {
+    /**
+     * Sets observer instances to receive updates about total revenue.
+     *
+     * @param trv  The {@link TotalRevenueView} observer for displaying total
+     *             revenue in the UI.
+     * @param trfo The {@link TotalRevenueFileOutput} observer for logging total
+     *             revenue to a file.
+     */
+    public void setObservers(TotalRevenueView trv, TotalRevenueFileOutput trfo) {
         cashRegister.addObserver(trv);
         cashRegister.addObserver(trfo);
     }
@@ -77,10 +85,15 @@ public class Controller {
     /**
      * Registers an item in the current sale. If the item already exists in the
      * sale, its quantity is increased. Otherwise, the item is retrieved from the
-     * inventory system and added to the sale.
+     * inventory system and added to the sale. If the item identifier is invalid or
+     * the inventory system cannot be reached, appropriate exceptions are handled
+     * and logged.
      *
      * @param itemID The unique identifier of the item to be registered.
-     * @throws ItemNotFoundException 
+     * @throws ItemNotFoundException if no item with the specified identifier is
+     *                               found in the inventory. This exception is also
+     *                               logged and an informative message is shown to
+     *                               the user.
      */
     public void registerItem(String itemID) throws ItemNotFoundException {
         if (currentSale.itemExists(itemID)) {

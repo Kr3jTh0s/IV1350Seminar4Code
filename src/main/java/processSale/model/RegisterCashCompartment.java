@@ -14,10 +14,11 @@ import src.main.java.processSale.view.TotalRevenueFileOutput;
  */
 public class RegisterCashCompartment {
     private BigDecimal totalCashInRegister;     // Total cash in the register
-    private List<RevenueObserver> observers;    // Handles logging total cash to user and file
+    private List<RevenueObserver> observers;    // Obeservers for logging total cash to user and file
 
     /**
      * Constructs a new RegisterCashCompartment with zero initial cash.
+     * Declares list of observers.
      */
     public RegisterCashCompartment() {
         totalCashInRegister = BigDecimal.ZERO;
@@ -25,7 +26,7 @@ public class RegisterCashCompartment {
     }
 
     /**
-     * Sets the observer that will be notified when the total cash changes.
+     * Adds the observer that will be notified when the total cash changes.
      *
      * @param observer The RevenueObserver to notify.
      */

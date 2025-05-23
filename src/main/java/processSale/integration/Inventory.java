@@ -54,6 +54,7 @@ public class Inventory {
      * @return The {@link ItemDTO} object if found.
      * @throws ItemNotFoundException if the item with the specified ID is not found
      *                               in the inventory.
+     * @throws ConnectionEstablishmentException if certain hardcoded message is read.
      */
     public ItemDTO getItem(String itemID) throws ItemNotFoundException, ConnectionEstablishmentException {
 
