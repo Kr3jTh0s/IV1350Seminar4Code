@@ -1,4 +1,4 @@
-package src.test.java.controller;
+package src.test.java.integration;
 
 import org.junit.jupiter.api.Test;
 

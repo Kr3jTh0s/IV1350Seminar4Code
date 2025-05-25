@@ -42,7 +42,7 @@ class RegisterCashCompartmentTest {
      */
     @Test
     void testAddToCashCompartmentNotifiesObserver() {
-        register.setObserver(observer);
+        register.addObserver(observer);
         BigDecimal added = new BigDecimal("100.00");
         BigDecimal result = register.addToCashCompartment(added);
 
@@ -55,9 +55,9 @@ class RegisterCashCompartmentTest {
      */
     @Test
     void testAddToCashCompartmentMultipleTimes() {
-        register.setObserver(observer);
+        register.addObserver(observer);
         register.addToCashCompartment(new BigDecimal("50.00"));
-        register.setObserver(observer);
+        register.addObserver(observer);
         BigDecimal result = register.addToCashCompartment(new BigDecimal("25.00"));
 
         assertEquals(new BigDecimal("75.00"), result, "Total cash should be the sum of all added amounts.");
@@ -78,7 +78,7 @@ class RegisterCashCompartmentTest {
      */
     @Test
     void testSetNullObserverAndAddThrowsException() {
-        register.setObserver(null);
+        register.addObserver(null);
         assertThrows(NullPointerException.class, () -> register.addToCashCompartment(new BigDecimal("5.00")),
                 "Adding cash with a null observer should throw NullPointerException.");
     }

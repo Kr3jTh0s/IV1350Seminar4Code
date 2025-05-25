@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import src.main.java.processSale.controller.Controller;
 import src.main.java.processSale.integration.*;
+import src.main.java.processSale.model.ItemNotFoundException;
 import src.main.java.processSale.model.RegisterCashCompartment;
 import src.main.java.processSale.view.View;
 
@@ -58,8 +59,8 @@ class ControllerTest {
                 "Registering the same item again should not throw an exception.");
         assertDoesNotThrow(() -> controller.registerItem("error"),
                 "Registering an item that triggers a connection error should not throw an exception.");
-        assertDoesNotThrow(() -> controller.registerItem("999"),
-                "Registering a non-existent item should not throw an exception (error is logged).");
+        assertThrows(ItemNotFoundException.class, () -> controller.registerItem("999"),
+                "Registering a non-existent item should throw an exception (error is logged).");
     }
 
     /**
@@ -68,7 +69,8 @@ class ControllerTest {
     @Test
     void testEndSale() {
         controller.startSale();
-        controller.registerItem("1");
+        assertDoesNotThrow(() -> controller.registerItem("1"),
+                "Registering a valid item should not throw and exception.");
         assertDoesNotThrow(() -> controller.endSale("customer123"), "Ending a sale should not throw an exception.");
     }
 
@@ -78,7 +80,8 @@ class ControllerTest {
     @Test
     void testProcessSaleWithValidPayment() {
         controller.startSale();
-        controller.registerItem("1");
+        assertDoesNotThrow(() -> controller.registerItem("1"),
+                "Registering a valid item should not throw and exception.");
         controller.endSale("customer123");
         assertDoesNotThrow(() -> controller.processSale(new BigDecimal(10.0)),
                 "Processing a sale with exact payment should not throw an exception.");
@@ -93,7 +96,8 @@ class ControllerTest {
     @Test
     void testProcessSaleWithInsufficientPayment() {
         controller.startSale();
-        controller.registerItem("1");
+        assertDoesNotThrow(() -> controller.registerItem("1"),
+                "Registering a valid item should not throw and exception.");
         controller.endSale("customer123");
         assertDoesNotThrow(() -> controller.processSale(new BigDecimal(5.0)),
                 "Processing a sale with insufficient payment should not throw an exception.");
@@ -146,7 +150,8 @@ class ControllerTest {
     @Test
     void testProcessSaleWithNullPayment() {
         controller.startSale();
-        controller.registerItem("1");
+        assertDoesNotThrow(() -> controller.registerItem("1"),
+                "Registering a valid item should not throw and exception.");
         controller.endSale("customer123");
         assertDoesNotThrow(() -> controller.processSale(null),
                 "Processing a sale with null payment should not throw an exception.");

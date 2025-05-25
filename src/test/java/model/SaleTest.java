@@ -83,7 +83,7 @@ class SaleTest {
      */
     @Test
     void testProcessSale() throws InsufficientPaymentException {
-        cashRegister.setObserver(new TotalRevenueView());
+        cashRegister.addObserver(new TotalRevenueView());
         sale.addItem(testItem1);
         sale.addItem(testItem2);
 
@@ -137,7 +137,7 @@ class SaleTest {
      */
     @Test
     void testAddItemWithHighVAT() throws InsufficientPaymentException {
-        cashRegister.setObserver(new TotalRevenueView());
+        cashRegister.addObserver(new TotalRevenueView());
         ItemDTO expensiveItem = new ItemDTO("Luxury Watch", "003", "High-end watch", new BigDecimal(1000.0),
                 new BigDecimal(0.25));
         sale.addItem(expensiveItem);
